@@ -1,0 +1,178 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "sandbox/MinSizeRel/sandbox.exe"
+		},
+		{
+			"path" : "sandbox/MinSizeRel/sandbox.pdb"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"target_link_libraries",
+			"target_include_directories",
+			"set_property",
+			"target_sources"
+		],
+		"files" : 
+		[
+			"sandbox/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 5,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 12,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 13,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 16,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 7,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "/MP16 /DWIN32 /D_WINDOWS /W3 /GR /EHsc /O1 /Ob1 /DNDEBUG -std:c++20"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 3,
+					"path" : "D:/projekty/vi/sandbox"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "D:/projekty/vi/vi"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					4
+				],
+				"standard" : "20"
+			},
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "vi::@e39d32aa0c065bf83d5c"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"id" : "sandbox::@e49c0a52b1bf699b6c68",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "/MP16 /DWIN32 /D_WINDOWS /W3 /GR /EHsc /O1 /Ob1 /DNDEBUG",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "/machine:x64 /INCREMENTAL:NO /subsystem:console",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "..\\vi\\MinSizeRel\\vi.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "sandbox",
+	"nameOnDisk" : "sandbox.exe",
+	"paths" : 
+	{
+		"build" : "sandbox",
+		"source" : "sandbox"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				1,
+				2
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 5,
+			"compileGroupIndex" : 0,
+			"path" : "sandbox/source/SandboxApp.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "vi/source/core/Application.hpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "vi/source/core/Log.hpp",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "EXECUTABLE"
+}

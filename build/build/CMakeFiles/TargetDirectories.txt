@@ -1,0 +1,5 @@
+D:/projekty/vi/build/build/CMakeFiles/ALL_BUILD.dir
+D:/projekty/vi/build/build/CMakeFiles/ZERO_CHECK.dir
+D:/projekty/vi/build/build/sandbox/CMakeFiles/sandbox.dir
+D:/projekty/vi/build/build/sandbox/CMakeFiles/ALL_BUILD.dir
+D:/projekty/vi/build/build/vi/CMakeFiles/vi.dir
