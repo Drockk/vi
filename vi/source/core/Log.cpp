@@ -8,6 +8,15 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
 
+namespace {
+	void create_logger(const std::string& name, const std::vector<spdlog::sink_ptr>& sinks) {
+		auto logger = std::make_shared<spdlog::async_logger>(name, sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+		logger->set_level(spdlog::level::trace);
+		logger->flush_on(spdlog::level::trace);
+		spdlog::register_logger(logger);
+	}
+}
+
 namespace vi::core {
 	Log::~Log() {
 		spdlog::shutdown();
@@ -26,14 +35,7 @@ namespace vi::core {
 
 		std::vector<spdlog::sink_ptr> sinks {stdout_sink, file_sink};
 
-		auto core_logger = std::make_shared<spdlog::async_logger>("CORE", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
-		core_logger->set_level(spdlog::level::trace);
-		core_logger->flush_on(spdlog::level::trace);
-		spdlog::register_logger(core_logger);
-
-		auto app_logger = std::make_shared<spdlog::async_logger>("APP", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
-		app_logger->set_level(spdlog::level::trace);
-		app_logger->flush_on(spdlog::level::trace);
-		spdlog::register_logger(app_logger);
+		create_logger("CORE", sinks);
+		create_logger("APP", sinks);
 	}
 }
