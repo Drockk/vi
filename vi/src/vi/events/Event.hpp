@@ -2,6 +2,7 @@
 
 #include <string>
 #include <functional>
+#include <ostream>
 
 #define BIT(x) (1 << x)
 
@@ -62,7 +63,7 @@ public:
     }
 
     template<typename T>
-    bool Dispatch(EventFn<T> func)
+    bool dispatch(EventFn<T> func)
     {
         if (m_event.getEventType() == T::getStaticType()) {
             m_event.m_handled = func(*(T*)&m_event);

@@ -1,5 +1,5 @@
 #pragma once
 
-#include "core/Application.hpp"
-#include "core/EntryPoint.hpp"
-#include "core/Log.hpp"
+#include "vi/core/Application.hpp"
+#include "vi/core/EntryPoint.hpp"
+#include "vi/core/Log.hpp"
