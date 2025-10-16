@@ -3,6 +3,7 @@
 #include <string>
 #include <functional>
 #include <ostream>
+#include <spdlog/fmt/fmt.h>
 
 #define BIT(x) (1 << x)
 
@@ -82,3 +83,13 @@ inline std::ostream& operator<<(std::ostream& os, const Event& e)
     return os << e.toString();
 }
 }
+
+// Formatter for fmt/spdlog
+template <>
+struct fmt::formatter<vi::Event> : fmt::formatter<std::string>
+{
+    auto format(const vi::Event& e, format_context& ctx) const
+    {
+        return fmt::formatter<std::string>::format(e.toString(), ctx);
+    }
+};

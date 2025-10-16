@@ -9,19 +9,19 @@ namespace windows
 class Window final : public vi::Window
 {
 public:
-    Window(const vi::WindowProps& props);
+    Window(const vi::WindowProps& t_props);
     ~Window() override;
 
     void onUpdate() override;
     uint32_t getWidth() const override;
     uint32_t getHeight() const override;
 
-    void setEventCallback(const EventCallbackFn& callback) override;
-    void setVSync(bool enabled) override;
+    void setEventCallback(const EventCallbackFn& t_callback) override;
+    void setVSync(bool t_enabled) override;
     bool isVSync() const override;
 
 private:
-    void init(const vi::WindowProps& props);
+    void init(const vi::WindowProps& t_props);
     void shutdown();
 
     GLFWwindow* m_window{nullptr};
