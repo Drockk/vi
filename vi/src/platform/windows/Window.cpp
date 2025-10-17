@@ -5,13 +5,12 @@
 
 #include "vi/core/Log.hpp"
 #include <GLFW/glfw3.h>
-#include "Window.hpp"
 
 namespace
 {
-    static bool s_GLFWInitialized{ false };
+    bool s_glfw_initialized{ false };
 
-    static void GLFWErrorCallback(int t_error, const char* t_description)
+    void glfw_error_callback(int t_error, const char* t_description)
     {
         VI_CORE_ERROR("GLFW Error ({}): {}", t_error, t_description);
     }
@@ -37,13 +36,13 @@ namespace windows
 
         VI_CORE_INFO("Creating window {}, ({}, {})", t_props.title, t_props.width, t_props.height);
 
-        if (!s_GLFWInitialized) {
+        if (!s_glfw_initialized) {
             if (glfwInit() == GLFW_FALSE) {
                 throw std::runtime_error("Could not initialize GLFW!");
             }
 
-            glfwSetErrorCallback(GLFWErrorCallback);
-            s_GLFWInitialized = true;
+            glfwSetErrorCallback(glfw_error_callback);
+            s_glfw_initialized = true;
         }
 
         m_window = glfwCreateWindow(
@@ -57,9 +56,8 @@ namespace windows
         glfwSetWindowUserPointer(m_window, &m_data);
         setVSync(true);
 
-        glfwSetWindowSizeCallback(m_window, [](GLFWwindow* t_window, int t_width, int t_height)
-        {
-            auto& data = *reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
+        glfwSetWindowSizeCallback(m_window, [](GLFWwindow* t_window, const int t_width, const int t_height) {
+            auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
             data.width = t_width;
             data.height = t_height;
 
@@ -67,16 +65,14 @@ namespace windows
             data.eventCallback(event);
         });
 
-        glfwSetWindowCloseCallback(m_window, [](GLFWwindow* t_window)
-        {
-            auto& data = *reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
+        glfwSetWindowCloseCallback(m_window, [](GLFWwindow* t_window) {
+            const auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
             vi::WindowCloseEvent event;
             data.eventCallback(event);
         });
 
-        glfwSetKeyCallback(m_window, [](GLFWwindow* t_window, int t_key, int t_scancode, int t_action, int t_mods)
-        {
-            auto& data = *reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
+        glfwSetKeyCallback(m_window, [](GLFWwindow* t_window, const int t_key, int t_scancode, int t_action, int t_mods) {
+            const auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
 
             switch (t_action)
             {
@@ -98,12 +94,14 @@ namespace windows
                 data.eventCallback(event);
                 break;
             }
+            default:
+                VI_CORE_ERROR("Unknown GLFW action {}", t_action);
+                break;
             }
         });
 
-        glfwSetMouseButtonCallback(m_window, [](GLFWwindow* t_window, int t_button, int t_action, int t_mods)
-        {
-            auto& data = *reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
+        glfwSetMouseButtonCallback(m_window, [](GLFWwindow* t_window, const int t_button, int t_action, int t_mods) {
+            const auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
 
             switch (t_action)
             {
@@ -119,22 +117,23 @@ namespace windows
                 data.eventCallback(event);
                 break;
             }
+            default:
+                VI_CORE_ERROR("Unknown GLFW action {}", t_action);
+                break;
             }
         });
 
-        glfwSetScrollCallback(m_window, [](GLFWwindow* t_window, double t_xOffset, double t_yOffset)
-        {
-            auto& data = *reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
+        glfwSetScrollCallback(m_window, [](GLFWwindow* t_window, const double t_x_offset, const double t_y_offset) {
+            const auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
 
-            vi::MouseScrolledEvent event(static_cast<float>(t_xOffset), static_cast<float>(t_yOffset));
+            vi::MouseScrolledEvent event(static_cast<float>(t_x_offset), static_cast<float>(t_y_offset));
             data.eventCallback(event);
         });
 
-        glfwSetCursorPosCallback(m_window, [](GLFWwindow* t_window, double t_xPos, double t_yPos)
-        {
-            auto& data = *reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
+        glfwSetCursorPosCallback(m_window, [](GLFWwindow* t_window, const double t_x_pos, const double t_y_pos) {
+            const auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
 
-            vi::MouseMovedEvent event(static_cast<float>(t_xPos), static_cast<float>(t_yPos));
+            vi::MouseMovedEvent event(static_cast<float>(t_x_pos), static_cast<float>(t_y_pos));
             data.eventCallback(event);
         });
     }
@@ -143,11 +142,12 @@ namespace windows
     {
         if (m_window) {
             glfwDestroyWindow(m_window);
+            m_window = nullptr;
         }
 
-        if (s_GLFWInitialized) {
+        if (s_glfw_initialized) {
             glfwTerminate();
-            s_GLFWInitialized = false;
+            s_glfw_initialized = false;
         }
     }
 
@@ -167,14 +167,14 @@ namespace windows
         return m_data.height;
     }
 
-    void Window::setVSync(bool enabled)
+    void Window::setVSync(const bool t_enabled)
     {
-        if (enabled) {
+        if (t_enabled) {
             glfwSwapInterval(1);
         } else {
             glfwSwapInterval(0);
         }
-        m_data.vSync = enabled;
+        m_data.vSync = t_enabled;
     }
 
     bool Window::isVSync() const

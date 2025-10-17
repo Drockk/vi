@@ -28,10 +28,10 @@ private:
 
     struct WindowData
     {
-        std::string title;
-        uint32_t width;
-        uint32_t height;
-        bool vSync;
+        std::string title{};
+        uint32_t width{};
+        uint32_t height{};
+        bool vSync{};
 
         EventCallbackFn eventCallback;
     };

@@ -20,21 +20,41 @@ namespace vi
         while (m_running) {
             glClearColor(1, 0, 1, 1);
             glClear(GL_COLOR_BUFFER_BIT);
+
+            for (Layer* layer : m_layerStack) {
+                layer->onUpdate();
+            }
+
             m_window->onUpdate();
         }
     }
 
-    void Application::onEvent(Event& e)
+    void Application::onEvent(Event& t_event)
     {
-        EventDispatcher dispatcher(e);
+        EventDispatcher dispatcher(t_event);
         dispatcher.dispatch<WindowCloseEvent>(
             [this](WindowCloseEvent& e) { return onWindowClose(e); }
         );
 
-        VI_CORE_TRACE("{0}", e);
+        for (auto it = m_layerStack.end(); it != m_layerStack.begin();) {
+            (*--it)->onEvent(t_event);
+            if (t_event.handled) {
+                break;
+            }
+        }
     }
 
-    bool Application::onWindowClose(WindowCloseEvent& e)
+    void Application::pushLayer(Layer* t_layer)
+    {
+        m_layerStack.pushLayer(t_layer);
+    }
+
+    void Application::pushOverlay(Layer* t_layer)
+    {
+        m_layerStack.pushOverlay(t_layer);
+    }
+
+    bool Application::onWindowClose(WindowCloseEvent&)
     {
         m_running = false;
         return true;
