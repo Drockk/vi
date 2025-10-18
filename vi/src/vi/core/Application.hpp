@@ -19,8 +19,8 @@ public:
 
     void onEvent(Event& t_event);
 
-    void pushLayer(Layer* t_layer);
-    void pushOverlay(Layer* t_layer);
+    void pushLayer(std::unique_ptr<Layer> t_layer);
+    void pushOverlay(std::unique_ptr<Layer> t_layer);
 
 private:
     bool onWindowClose(WindowCloseEvent& t_event);

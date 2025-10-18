@@ -26,7 +26,7 @@ class SandboxApp: public vi::Application
 public:
     SandboxApp()
     {
-        pushLayer(new ExampleLayer);
+        pushLayer(std::make_unique<ExampleLayer>());
     }
 
     ~SandboxApp() override = default;

@@ -21,7 +21,7 @@ namespace vi
             glClearColor(1, 0, 1, 1);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            for (Layer* layer : m_layerStack) {
+            for (auto& layer : m_layerStack) {
                 layer->onUpdate();
             }
 
@@ -44,14 +44,14 @@ namespace vi
         }
     }
 
-    void Application::pushLayer(Layer* t_layer)
+    void Application::pushLayer(std::unique_ptr<Layer> t_layer)
     {
-        m_layerStack.pushLayer(t_layer);
+        m_layerStack.pushLayer(std::move(t_layer));
     }
 
-    void Application::pushOverlay(Layer* t_layer)
+    void Application::pushOverlay(std::unique_ptr<Layer> t_layer)
     {
-        m_layerStack.pushOverlay(t_layer);
+        m_layerStack.pushOverlay(std::move(t_layer));
     }
 
     bool Application::onWindowClose(WindowCloseEvent&)
