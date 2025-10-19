@@ -45,18 +45,18 @@ namespace windows
             s_glfw_initialized = true;
         }
 
-        m_window = glfwCreateWindow(
+        m_window.reset(glfwCreateWindow(
             static_cast<int>(t_props.width),
             static_cast<int>(t_props.height),
             m_data.title.c_str(),
             nullptr, nullptr
-        );
+        ));
 
-        glfwMakeContextCurrent(m_window);
-        glfwSetWindowUserPointer(m_window, &m_data);
+        glfwMakeContextCurrent(m_window.get());
+        glfwSetWindowUserPointer(m_window.get(), &m_data);
         setVSync(true);
 
-        glfwSetWindowSizeCallback(m_window, [](GLFWwindow* t_window, const int t_width, const int t_height) {
+        glfwSetWindowSizeCallback(m_window.get(), [](GLFWwindow* t_window, const int t_width, const int t_height) {
             auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
             data.width = t_width;
             data.height = t_height;
@@ -65,13 +65,13 @@ namespace windows
             data.eventCallback(event);
         });
 
-        glfwSetWindowCloseCallback(m_window, [](GLFWwindow* t_window) {
+        glfwSetWindowCloseCallback(m_window.get(), [](GLFWwindow* t_window) {
             const auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
             vi::WindowCloseEvent event;
             data.eventCallback(event);
         });
 
-        glfwSetKeyCallback(m_window, [](GLFWwindow* t_window, const int t_key, int t_scancode, int t_action, int t_mods) {
+        glfwSetKeyCallback(m_window.get(), [](GLFWwindow* t_window, const int t_key, int t_scancode, int t_action, int t_mods) {
             const auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
 
             switch (t_action)
@@ -100,7 +100,7 @@ namespace windows
             }
         });
 
-        glfwSetMouseButtonCallback(m_window, [](GLFWwindow* t_window, const int t_button, int t_action, int t_mods) {
+        glfwSetMouseButtonCallback(m_window.get(), [](GLFWwindow* t_window, const int t_button, int t_action, int t_mods) {
             const auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
 
             switch (t_action)
@@ -123,14 +123,14 @@ namespace windows
             }
         });
 
-        glfwSetScrollCallback(m_window, [](GLFWwindow* t_window, const double t_x_offset, const double t_y_offset) {
+        glfwSetScrollCallback(m_window.get(), [](GLFWwindow* t_window, const double t_x_offset, const double t_y_offset) {
             const auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
 
             vi::MouseScrolledEvent event(static_cast<float>(t_x_offset), static_cast<float>(t_y_offset));
             data.eventCallback(event);
         });
 
-        glfwSetCursorPosCallback(m_window, [](GLFWwindow* t_window, const double t_x_pos, const double t_y_pos) {
+        glfwSetCursorPosCallback(m_window.get(), [](GLFWwindow* t_window, const double t_x_pos, const double t_y_pos) {
             const auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(t_window));
 
             vi::MouseMovedEvent event(static_cast<float>(t_x_pos), static_cast<float>(t_y_pos));
@@ -140,10 +140,7 @@ namespace windows
 
     void Window::shutdown()
     {
-        if (m_window) {
-            glfwDestroyWindow(m_window);
-            m_window = nullptr;
-        }
+        m_window.reset();
 
         if (s_glfw_initialized) {
             glfwTerminate();
@@ -154,7 +151,7 @@ namespace windows
     void Window::onUpdate()
     {
         glfwPollEvents();
-        glfwSwapBuffers(m_window);
+        glfwSwapBuffers(m_window.get());
     }
 
     uint32_t Window::getWidth() const

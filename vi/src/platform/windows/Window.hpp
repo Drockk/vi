@@ -1,6 +1,8 @@
 #pragma once
 
 #include "vi/core/Window.hpp"
+#include <memory>
+#include <GLFW/glfw3.h>
 
 struct GLFWwindow;
 
@@ -24,7 +26,17 @@ private:
     void init(const vi::WindowProps& t_props);
     void shutdown();
 
-    GLFWwindow* m_window{nullptr};
+    struct GLFWwindowDeleter
+    {
+        void operator()(GLFWwindow* window) const
+        {
+            if (window) {
+                glfwDestroyWindow(window);
+            }
+        }
+    };
+
+    std::unique_ptr<GLFWwindow, GLFWwindowDeleter> m_window{nullptr};
 
     struct WindowData
     {
