@@ -24,6 +24,7 @@ public:
 
 private:
     void init(const vi::WindowProps& t_props);
+    static void initGlad();
     void shutdown();
 
     struct GLFWwindowDeleter

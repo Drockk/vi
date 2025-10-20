@@ -4,6 +4,9 @@
 #include "vi/events/MouseEvent.hpp"
 
 #include "vi/core/Log.hpp"
+
+#define GLAD_GL_IMPLEMENTATION
+#include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
 namespace
@@ -53,6 +56,9 @@ namespace windows
         ));
 
         glfwMakeContextCurrent(m_window.get());
+
+        initGlad();
+
         glfwSetWindowUserPointer(m_window.get(), &m_data);
         setVSync(true);
 
@@ -136,6 +142,16 @@ namespace windows
             vi::MouseMovedEvent event(static_cast<float>(t_x_pos), static_cast<float>(t_y_pos));
             data.eventCallback(event);
         });
+    }
+
+    void Window::initGlad()
+    {
+        const auto version = gladLoadGL(glfwGetProcAddress);
+        if (version == 0) {
+            throw std::runtime_error("Failed to initialize Glad!");
+        }
+
+        VI_CORE_INFO("Loaded OpenGL {}.{}", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
     }
 
     void Window::shutdown()

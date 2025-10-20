@@ -2,9 +2,7 @@
 #include "vi/core/Log.hpp"
 
 //TODO: temporary //////////////////////////////
-#include <Windows.h>
-#include <gl/GL.h>
-#include <GLFW/glfw3.h>
+#include <glad/gl.h>
 ///////////////////////////////////////////////
 
 namespace vi
