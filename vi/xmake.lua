@@ -1,5 +1,4 @@
 add_requires("spdlog 1.15.*")
--- add_requires("glad")
 add_requires("glfw 3.4")
 
 target("vi")
@@ -9,5 +8,4 @@ target("vi")
     add_includedirs("src/", {public = true})
     add_includedirs("thirdparty/glad/include", {public = true})
     add_packages("spdlog", {public = true})
-    -- add_packages("glad", {public = true})
     add_packages("glfw", {public = true})
